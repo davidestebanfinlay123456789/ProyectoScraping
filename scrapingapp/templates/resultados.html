@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Resultados de Scraping</title>
+    <!-- Agrega enlaces a tus archivos de estilo, como CSS de Bootstrap aquí si es necesario -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="mb-4">Resultados de Scraping</h1>
+        <table class="table table-bordered table-responsive">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Título</th>
+                    <th>Autor</th>
+                    <th>Descripción</th>
+                    <th>Fuente</th>
+                    <th>Fecha de publicación</th>
+                    <th>Enlace del documento</th>
+                    <th>Número de citas</th>
+                    <th>Tipo de documento consultado</th>
+                    <th>Cantidad de versiones</th>
+                    <!-- Agrega más encabezados según tus datos -->
+                </tr>
+            </thead>
+            <tbody>
+                {% for data_item in data %}
+                <tr>
+                    <td>{{ data_item.Título_de_la_investigación }}</td>
+                    <td>{{ data_item.Autor }}</td>
+                    <td>{{ data_item.Descripción }}</td>
+                    <td>{{ data_item.Fuente }}</td>
+                    <td>{{ data_item.Fecha_de_publicación }}</td>
+                    <td><a href="{{ data_item.Enlace_del_documento }}" target="_blank">{{ data_item.Enlace_del_documento }}</a></td>
+                    <td>{{ data_item.Número_de_citas }}</td>
+                    <td>{{ data_item.Tipo_de_documento_consultado }}</td>
+                    <td>{{ data_item.Cantidad_de_versiones_del_documento }}</td>
+                    <!-- Agrega más celdas según tus datos -->
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <!-- Agrega aquí cualquier otro contenido o elementos HTML que necesites -->
+    </div>
+    <!-- Agrega enlaces a los archivos JS de Bootstrap si es necesario -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
