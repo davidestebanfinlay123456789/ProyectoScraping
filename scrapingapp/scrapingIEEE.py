@@ -58,7 +58,7 @@ class Clase5:
         if response.status_code == 200:
             #print("entro")
             # Define la ubicación del controlador WebDriver de Edge en Heroku
-            msedgedriver_path = '/app/.chromedriver/bin/chromedriver' 
+            msedgedriver_path = '=/app/msedgedriver.exe' 
             os.environ['PATH'] = f"{os.environ['PATH']}:{msedgedriver_path}"
             # Configura la ubicación del controlador en las opciones de Edge
             edge_options = EdgeOptions()
