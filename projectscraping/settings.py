@@ -28,7 +28,11 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['scraping-323-c07f0718337b.herokuapp.com','']
 #ALLOWED_HOSTS = []
-
+CSRF_TRUSTED_ORIGINS = [
+    "https://scraping-323-c07f0718337b.herokuapp.com",  # Agregado "https://"
+    "https://yourcustomdomain.com",  # Agregado "https://"
+    # Otros orígenes aquí
+]
 
 # Application definition
 
