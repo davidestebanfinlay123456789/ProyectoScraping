@@ -27,7 +27,7 @@ def scrape_and_export(request):
         
 
         instancia_clase4 = Clase4()
-        #instancia_clase5 = Clase5()
+        instancia_clase5 = Clase5()
 
         scraped_data = instancia_clase4.funcion_clase4(search_kw)
         all_data.extend(scraped_data)
