@@ -57,7 +57,7 @@ class Clase5:
             webdriver_path = 'path/to/your/webdriver'
             edge_options = Options()
             edge_options.headless = True
-            driver = webdriver.Chrome(executable_path=webdriver_path) 
+            driver = webdriver.Edge(executable_path=webdriver_path) 
             driver.get(response.url)
             time.sleep(random.uniform(1, 2))
             page_content = driver.page_source
