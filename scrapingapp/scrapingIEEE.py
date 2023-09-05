@@ -7,7 +7,10 @@ from selenium import webdriver
 from selenium.webdriver.edge.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
-
+from selenium.webdriver.edge.service import Service as EdgeService
+from selenium.webdriver.edge.options import Options as EdgeOptions
+from selenium.webdriver.edge.webdriver import WebDriver as EdgeWebDriver
+import os
 class Clase5:
     def funcion_clase5(self, search_kw):
 
@@ -54,10 +57,17 @@ class Clase5:
         # Verifica si la solicitud fue exitosa
         if response.status_code == 200:
             #print("entro")
-            webdriver_path = 'msedgedriver.exe'
-            edge_options = webdriver.EdgeOptions()
+            # Define la ubicación del controlador WebDriver de Edge en Heroku
+            msedgedriver_path = '/app/.chromedriver/bin/chromedriver' 
+            os.environ['PATH'] = f"{os.environ['PATH']}:{msedgedriver_path}"
+            # Configura la ubicación del controlador en las opciones de Edge
+            edge_options = EdgeOptions()
             edge_options.use_chromium = True
-            driver = webdriver.Edge(options=edge_options)
+            edge_options.binary_location = '/app/.apt/usr/bin/microsoft-edge'  # Ruta específica de Heroku para el binario de Edge
+            edge_options.add_argument('--headless')  # Opcional: Ejecutar en modo sin cabeza (headless)
+
+            # Crea la instancia del controlador WebDriver de Edge
+            driver = EdgeWebDriver(service=EdgeService(msedgedriver_path), options=edge_options)
             driver.get(response.url)
             time.sleep(random.uniform(1, 2))
             page_content = driver.page_source
