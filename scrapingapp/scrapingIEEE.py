@@ -55,9 +55,9 @@ class Clase5:
         if response.status_code == 200:
             #print("entro")
             webdriver_path = 'path/to/your/webdriver'
-            edge_options = Options()
-            edge_options.headless = True
-            driver = webdriver.Edge(executable_path=webdriver_path) 
+            edge_options = webdriver.EdgeOptions()
+            edge_options.use_chromium = True
+            driver = webdriver.Edge(executable_path=webdriver_path, options=edge_options) 
             driver.get(response.url)
             time.sleep(random.uniform(1, 2))
             page_content = driver.page_source
