@@ -3,7 +3,7 @@ from django.shortcuts import render
 
 
 from .scrapingArxiv import Clase4
-#from .scrapingIEEE import Clase5
+from .scrapingIEEE import Clase5
 
 
 from .models import Resultado  # Asegúrate de importar tu modelo Resultado
@@ -31,8 +31,8 @@ def scrape_and_export(request):
 
         scraped_data = instancia_clase4.funcion_clase4(search_kw)
         all_data.extend(scraped_data)
-        #scraped_data = instancia_clase5.funcion_clase5(search_kw)
-        #all_data.extend(scraped_data)
+        scraped_data = instancia_clase5.funcion_clase5(search_kw)
+        all_data.extend(scraped_data)
 
         # Crear un DataFrame de pandas desde los datos recolectados
         df = pd.DataFrame(all_data)
