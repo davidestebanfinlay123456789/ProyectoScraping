@@ -58,7 +58,7 @@ class Clase5:
             edge_options.headless = True
             driver = webdriver.Edge() 
             driver.get(response.url)
-            time.sleep(random.uniform(1, 2))
+            time.sleep(random.uniform(1, 3))
             page_content = driver.page_source
 
             # Parsea el contenido HTML usando BeautifulSoup
@@ -72,7 +72,7 @@ class Clase5:
             except:
                 pass
 
-            #print(result_items)
+            print(result_items)
             result_items = result_items[:10]
 
             for result in result_items:
@@ -101,11 +101,13 @@ class Clase5:
 
                 titulo_elem = result.find('h3', class_='text-md-md-lh').find('a', class_='fw-bold')
                 autor_elem = result.find_all('span', class_='text-base-md-lh')
+                resumen = result.find('div', class_='js-displayer-content u-mt-1 stats-SearchResults_DocResult_ViewMore text-base-md-lh')
                 fuente_ext = result.find('a', href=True)
                 fech_elem = result.find('div', class_='publisher-info-container').find_all('span')[0]
                 link_elem = soup.find('ul', class_='List List--horizontal').find('a', class_='stats_PDF_10029336 u-flex-display-flex',  href=True)
                 citations_elem = soup.find('a', href=True, text=re.compile(r'^Papers \(\d+\)$'))
-            
+                #link3 = result.find()
+
                 if citations_elem:
                     citations_text = citations_elem.get_text()
                     citations_match = re.search(r'\((\d+)\)', citations_text)
@@ -129,7 +131,6 @@ class Clase5:
                 link = link_elem['href'] if link_elem else 'NO ENCONTRADO'
                 link2 = 'https://ieeexplore.ieee.org'+link 
                 tipo_docu = 'PDF'
-                resumen = 'NO ENCONTRADO'
                 repositorio="IEEE"
 
 

@@ -3,7 +3,10 @@ from django.shortcuts import render
 
 
 from .scrapingArxiv import Clase4
-#from .scrapingIEEE import Clase5
+from .scrapingEric import Clase7
+from .scrapingCora import Clase8
+from .scrapingPudMed import Clase1
+from .scrapingScielo import Clase10
 
 
 from .models import Resultado  # Asegúrate de importar tu modelo Resultado
@@ -24,15 +27,27 @@ def scrape_and_export(request):
     if request.method == 'POST':
         search_kw = request.POST['search_kw']
 
-        
-
+        instancia_clase1 = Clase1()
         instancia_clase4 = Clase4()
-        #instancia_clase5 = Clase5()
+        instancia_clase7 = Clase7()
+        instancia_clase8 = Clase8()
+        instancia_clase10 = Clase10()
 
+
+        scraped_data = instancia_clase1.funcion_clase1(search_kw)
+        all_data.extend(scraped_data)
+        
         scraped_data = instancia_clase4.funcion_clase4(search_kw)
         all_data.extend(scraped_data)
-        #scraped_data = instancia_clase5.funcion_clase5(search_kw)
-        #all_data.extend(scraped_data)
+
+        scraped_data = instancia_clase7.funcion_clase7(search_kw)
+        all_data.extend(scraped_data)
+
+        scraped_data = instancia_clase8.funcion_clase8(search_kw)
+        all_data.extend(scraped_data)
+
+        scraped_data = instancia_clase10.funcion_clase10(search_kw)
+        all_data.extend(scraped_data)
 
         # Crear un DataFrame de pandas desde los datos recolectados
         df = pd.DataFrame(all_data)
@@ -59,7 +74,7 @@ def scrape_and_export(request):
             resultado.save()
 
         # Obtén los resultados desde la base de datos
-        ultimos_registros = Resultado.objects.order_by('-id')[:20]
+        ultimos_registros = Resultado.objects.order_by('-id')[:50]
 
         # Pasa los resultados a la plantilla y renderiza
         context = {'data': ultimos_registros}
