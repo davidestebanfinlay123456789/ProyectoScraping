@@ -8,7 +8,7 @@ from .scrapingEric import Clase7
 from .scrapingCora import Clase8
 from .scrapingPudMed import Clase1
 from .scrapingScielo import Clase10
-from .scrapingIEEE import Clase5
+#from .scrapingIEEE import Clase5
 
 
 from .models import Resultado  # Asegúrate de importar tu modelo Resultado
@@ -31,7 +31,7 @@ def scrape_and_export(request):
 
         instancia_clase1 = Clase1()
         instancia_clase4 = Clase4()
-        instancia_clase5 = Clase5()
+        #instancia_clase5 = Clase5()
         instancia_clase7 = Clase7()
         instancia_clase8 = Clase8()
         instancia_clase10 = Clase10()
@@ -42,8 +42,8 @@ def scrape_and_export(request):
         
         scraped_data = instancia_clase4.funcion_clase4(search_kw)
         all_data.extend(scraped_data)
-        scraped_data = instancia_clase5.funcion_clase5(search_kw)
-        all_data.extend(scraped_data)
+        #scraped_data = instancia_clase5.funcion_clase5(search_kw)
+        #all_data.extend(scraped_data)
 
         scraped_data = instancia_clase7.funcion_clase7(search_kw)
         all_data.extend(scraped_data)
