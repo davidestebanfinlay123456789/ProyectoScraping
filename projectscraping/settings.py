@@ -30,7 +30,7 @@ ALLOWED_HOSTS = ['webscrapingapp-323.azurewebsites.net']
 #ALLOWED_HOSTS = ['scraping-323-c07f0718337b.herokuapp.com','']
 #ALLOWED_HOSTS = []
 CSRF_TRUSTED_ORIGINS = [
-    "webscrapingapp-323.azurewebsites.net",  # Agregado "https://"
+    "https://webscrapingapp-323.azurewebsites.net/",  # Agregado "https://"
     "https://yourcustomdomain.com",  # Agregado "https://"
     # Otros orígenes aquí
 ]
