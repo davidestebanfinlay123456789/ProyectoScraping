@@ -67,6 +67,12 @@ def scrape_and_export(request):
 
     return render(request, 'index.html')
 
+
+#kdfjgsdfjgjkdlfgdñsfkgjdsflkgjdslkgjsdñlfkgjsldkfjglsdjfglkjgfslkfjgñlsdfgj
+#fglskdjfgksdjglkdjfgkl
+#sdfklsjdflksjdfk
+
+
 def mostrar_resultados(request):
     resultados = Resultado.objects.all()  # Obtén los resultados desde la base de datos
     context = {'data': resultados}  # Pasa los resultados a la plantilla
