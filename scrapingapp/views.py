@@ -83,9 +83,6 @@ def scrape_and_export(request):
     return render(request, 'index.html')
 
 
-#kdfjgsdfjgjkdlfgdñsfkgjdsflkgjdslkgjsdñlfkgjsldkfjglsdjfglkjgfslkfjgñlsdfgj
-#fglskdjfgksdjglkdjfgkl
-#sdfklsjdflksjdfk
 
 
 def mostrar_resultados(request):
