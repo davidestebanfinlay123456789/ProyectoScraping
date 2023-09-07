@@ -1,54 +1,154 @@
 <!DOCTYPE html>
-<html>
-<form method="post">
-    {% csrf_token %}
-    <head>
-        <title>Resultados de Scraping</title>
-        <!-- Agrega enlaces a tus archivos de estilo, como CSS de Bootstrap aquí si es necesario -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    </head>
-    <body>
-        <div class="container mt-5">
-            <h1 class="mb-4">Resultados de Scraping</h1>
-            <table class="table table-bordered table-responsive">
-                <thead class="thead-dark">
-                    <tr>
-                        <th>Título</th>
-                        <th>Autor</th>
-                        <th>Descripción</th>
-                        <th>Fuente</th>
-                        <th>Fecha de publicación</th>
-                        <th>Enlace del documento</th>
-                        <th>Número de citas</th>
-                        <th>Tipo de documento consultado</th>
-                        <th>Cantidad de versiones</th>
-                        <!-- Agrega más encabezados según tus datos -->
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for data_item in data %}
-                    <tr>
-                        <td>{{ data_item.Título_de_la_investigación }}</td>
-                        <td>{{ data_item.Autor }}</td>
-                        <td>{{ data_item.Descripción }}</td>
-                        <td>{{ data_item.Fuente }}</td>
-                        <td>{{ data_item.Fecha_de_publicación }}</td>
-                        <td><a href="{{ data_item.Enlace_del_documento }}" target="_blank">{{ data_item.Enlace_del_documento }}</a></td>
-                        <td>{{ data_item.Número_de_citas }}</td>
-                        <td>{{ data_item.Tipo_de_documento_consultado }}</td>
-                        <td>{{ data_item.Cantidad_de_versiones_del_documento }}</td>
-                        <!-- Agrega más celdas según tus datos -->
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-            <!-- Agrega aquí cualquier otro contenido o elementos HTML que necesites -->
-        </div>
-        <!-- Agrega enlaces a los archivos JS de Bootstrap si es necesario -->
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    </body>
-</form>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Resultados de Scraping</title>
+    <!-- Incluye las hojas de estilo de Material Design -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <!-- Incluye el CSS personalizado -->
+    <style>
+        /* Personaliza el estilo del contenedor de resultados */
+        .results-container {
+            display: flex;
+            flex-direction: column;
+            background-color: #fff; /* Fondo blanco similar a IEEE Xplore */
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
 
+        /* Personaliza el estilo de cada tarjeta de resultado */
+        .result-card {
+            background-color: #fff; /* Fondo blanco similar a IEEE Xplore */
+            border: 1px solid #ddd; /* Borde delgado similar a IEEE Xplore */
+            margin-bottom: 20px;
+            padding: 20px;
+            border-radius: 5px;
+        }
+
+        /* Estilo para el título de la tarjeta */
+        .result-card .card-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* Estilo para enlaces */
+        .result-card a {
+            color: #0073e6; /* Color azul similar a IEEE Xplore */
+            text-decoration: none;
+        }
+
+        /* Estilo para los botones */
+        .result-card .btn {
+            background-color: #0073e6; /* Color de botón similar a IEEE Xplore */
+            color: #fff;
+            border: none;
+        }
+
+        /* Estilo para la barra de herramientas */
+        .document-toolbar {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .document-toolbar .toolbar-item {
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        /* Estilo para los íconos de la barra de herramientas */
+        .document-toolbar .toolbar-item i {
+            font-size: 18px;
+            color: #0073e6; /* Color azul similar a IEEE Xplore */
+        }
+
+        /* Estilo para el botón Abstract y el contenido del resumen */
+        .abstract-control {
+            background-color: #0073e6;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        .abstract-content {
+            display: none; /* Oculta inicialmente el contenido del resumen */
+            background-color: #f2f2f2;
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="mb-4">Resultados de Scraping</h1>
+        <div class="results-container">
+            {% for data_item in data %}
+            <div class="result-card card">
+                
+                    <div class="card-content">
+                        <span class="card-title">{{ data_item.Título_de_la_investigación }}</span>
+                        <p><strong>Autor:</strong> {{ data_item.Autor }}</p>
+
+                        
+                        <p><strong>Fuente:</strong> <a href="{{ data_item.Fuente }}" target="_blank">Ir a la fuente</a></p>
+                        <p><strong>Fecha de publicación:</strong> {{ data_item.Fecha_de_publicación }}</p>
+                        <p><strong>Número de citas:</strong> {{ data_item.Número_de_citas }}</p>
+                        <p><strong>Tipo de documento consultado:</strong> {{ data_item.Tipo_de_documento_consultado }}</p>
+                        <p><strong>Cantidad de versiones:</strong> {{ data_item.Cantidad_de_versiones_del_documento }}</p>
+                        
+                        
+                        <!-- Barra de herramientas -->
+                        <ul class="document-toolbar">
+                            <li class="toolbar-item">
+                                <button class="abstract-control btn waves-effect waves-light">Abstract</button>
+                                <div class="abstract-content">
+                                    <p>{{ data_item.Descripción }}</p>
+                                </div>
+                            </li>
+                            <li class="toolbar-item">
+                                <a class="pdf-link" href="{{ data_item.Enlace_del_documento }}" target="_blank">
+                                    <i class="material-icons">picture_as_pdf</i>
+                                </a>
+                            </li>
+                            <li class="toolbar-item">
+                                <a class="copyright-link" href="javascript:void()">
+                                    <i class="material-icons">gavel</i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <!-- Incluye los scripts de Materialize CSS -->
+    <script>
+        // Obtén una lista de todos los botones "Abstract"
+        const abstractButtons = document.querySelectorAll('.abstract-control');
+    
+        // Agrega un controlador de eventos de clic a cada botón
+        abstractButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Encuentra el elemento de resumen más cercano al botón clickeado
+                const abstractContent = button.nextElementSibling;
+    
+                // Alterna la visibilidad del resumen
+                if (abstractContent.style.display === 'none' || abstractContent.style.display === '') {
+                    abstractContent.style.display = 'block';
+                } else {
+                    abstractContent.style.display = 'none';
+                }
+            });
+        });
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+</body>
 </html>
