@@ -73,9 +73,9 @@ class Clase8:
                 if tipo_docu == "" : tipo_docu = "No encontrado"
                 if version == "" : version = "No encontrado"
 
-
                 # Agrega los datos a la lista
                 data.append({'Título de la investigación:': titulo, 'Autor:': autor, 'Descripción:': resumen, 'Fuente:': fuente, 'Fecha de publicación:': fecha1, 'Enlace del documento:': link, 'Número de citas:': num_cit, 'Tipo de documento consultado:': tipo_docu, 'Cantidad de versiones del documento:': version, 'Repositrio': repositorio})
+                '''
                 # Imprime la información del resultado actual
                 print('Título de la investigación:', titulo)
                 print('Autor:' , autor)
@@ -87,7 +87,7 @@ class Clase8:
                 print('Tipo de documento consultado:' , tipo_docu)
                 print('Cantidad de versiones del documento:' , version) 
                 print('Repositoio:' , repositorio) 
-                print('-' * 50)   
+                print('-' * 50)   '''
             
 
         else:

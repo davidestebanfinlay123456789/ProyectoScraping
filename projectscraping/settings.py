@@ -26,9 +26,9 @@ SECRET_KEY = 'django-insecure-)*x!hz@636gcmtul%hlo+4n6l#=p8y5_jd#9$=#7%zor$)sh5#
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['webscrapingapp-323.azurewebsites.net']
+#ALLOWED_HOSTS = ['webscrapingapp-323.azurewebsites.net']
 #ALLOWED_HOSTS = ['scraping-323-c07f0718337b.herokuapp.com','']
-#ALLOWED_HOSTS = []
+ALLOWED_HOSTS = []
 CSRF_TRUSTED_ORIGINS = [
     "https://webscrapingapp-323.azurewebsites.net",  # Agregado "https://"
     "https://yourcustomdomain.com",  # Agregado "https://"

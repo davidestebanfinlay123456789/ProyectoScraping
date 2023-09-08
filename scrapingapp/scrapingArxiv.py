@@ -93,9 +93,9 @@ class Clase4:
                 version = 'NO ENCONTRADO'
                 repositorio="Arxiv"
 
-
                 # Agrega los datos a la lista
                 data.append({'Título de la investigación:': titulo, 'Autor:': autor, 'Descripción:': resumen, 'Fuente:': fuente, 'Fecha de publicación:': fecha3, 'Enlace del documento:': link, 'Número de citas:': num_cit, 'Tipo de documento consultado:': tipo_docu, 'Cantidad de versiones del documento:': version, 'Repositorio': repositorio})
+                '''
                 # Imprime la información del resultado actual
                 print('Título de la investigación:', titulo)
                 print('Autor:' , autor)
@@ -107,7 +107,7 @@ class Clase4:
                 print('Tipo de documento consultado:' , tipo_docu)
                 print('Cantidad de versiones del documento:' , version) 
                 print('Repositorio:' , repositorio) 
-                print('-' * 50)   
+                print('-' * 50)   '''
             
         
         else:

@@ -1,15 +1,11 @@
 import pandas as pd
 from django.shortcuts import render
-from django.views.decorators.csrf import csrf_protect
-
 
 from .scrapingArxiv import Clase4
 from .scrapingEric import Clase7
 from .scrapingCora import Clase8
 from .scrapingPudMed import Clase1
 from .scrapingScielo import Clase10
-#from .scrapingIEEE import Clase5
-
 
 from .models import Resultado  # Asegúrate de importar tu modelo Resultado
 from django.shortcuts import render
@@ -27,23 +23,32 @@ def scrape_and_export(request):
     all_data = []  # Vacía la lista al inicio de cada búsqueda
 
     if request.method == 'POST':
-        search_kw = request.POST['search_kw']
 
+        #valores recolectados de index.html
+        search_kw = request.POST['search_kw']
+        buscarPor = request.POST['buscarPor']
+        anoIni = request.POST['anoIni']
+        anoFin = request.POST['anoFin']
+        tipDoc = request.POST['tipDoc']
+
+        
+        print("search_kw " +search_kw)
+        print("buscarPor " +buscarPor)
+        print("anoIni " +anoIni)
+        print("anoFin " +anoFin)
+        print("tipDoc " +tipDoc)
+        
         instancia_clase1 = Clase1()
         instancia_clase4 = Clase4()
-        #instancia_clase5 = Clase5()
         instancia_clase7 = Clase7()
         instancia_clase8 = Clase8()
         instancia_clase10 = Clase10()
-
 
         scraped_data = instancia_clase1.funcion_clase1(search_kw)
         all_data.extend(scraped_data)
         
         scraped_data = instancia_clase4.funcion_clase4(search_kw)
         all_data.extend(scraped_data)
-        #scraped_data = instancia_clase5.funcion_clase5(search_kw)
-        #all_data.extend(scraped_data)
 
         scraped_data = instancia_clase7.funcion_clase7(search_kw)
         all_data.extend(scraped_data)
@@ -86,9 +91,6 @@ def scrape_and_export(request):
         return render(request, 'resultados.html', context)
 
     return render(request, 'index.html')
-
-
-
 
 def mostrar_resultados(request):
     resultados = Resultado.objects.all()  # Obtén los resultados desde la base de datos
