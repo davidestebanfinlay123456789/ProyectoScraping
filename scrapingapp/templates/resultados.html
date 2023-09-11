@@ -1,21 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+
     <title>Resultados de Scraping</title>
     <!-- Incluye las hojas de estilo de Material Design -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-    <link rel="stylesheet" href="styles.css">
     <!-- Incluye el CSS personalizado -->
     <style>
         /* Personaliza el estilo del contenedor de resultados */
         .results-container {
             display: flex;
             flex-direction: column;
-            background-color: #fff; /* Fondo blanco similar a IEEE Xplore */
+            background-color: #fff;
+            /* Fondo blanco similar a IEEE Xplore */
             padding: 20px;
             border-radius: 5px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -23,8 +24,10 @@
 
         /* Personaliza el estilo de cada tarjeta de resultado */
         .result-card {
-            background-color: #fff; /* Fondo blanco similar a IEEE Xplore */
-            border: 1px solid #ddd; /* Borde delgado similar a IEEE Xplore */
+            background-color: #fff;
+            /* Fondo blanco similar a IEEE Xplore */
+            border: 1px solid #ddd;
+            /* Borde delgado similar a IEEE Xplore */
             margin-bottom: 20px;
             padding: 20px;
             border-radius: 5px;
@@ -39,13 +42,15 @@
 
         /* Estilo para enlaces */
         .result-card a {
-            color: #0073e6; /* Color azul similar a IEEE Xplore */
+            color: #0073e6;
+            /* Color azul similar a IEEE Xplore */
             text-decoration: none;
         }
 
         /* Estilo para los botones */
         .result-card .btn {
-            background-color: #0073e6; /* Color de botón similar a IEEE Xplore */
+            background-color: #0073e6;
+            /* Color de botón similar a IEEE Xplore */
             color: #fff;
             border: none;
         }
@@ -64,7 +69,8 @@
         /* Estilo para los íconos de la barra de herramientas */
         .document-toolbar .toolbar-item i {
             font-size: 18px;
-            color: #0073e6; /* Color azul similar a IEEE Xplore */
+            color: #0073e6;
+            /* Color azul similar a IEEE Xplore */
         }
 
         /* Estilo para el botón Abstract y el contenido del resumen */
@@ -76,70 +82,103 @@
         }
 
         .abstract-content {
-            display: none; /* Oculta inicialmente el contenido del resumen */
+            display: none;
+            /* Oculta inicialmente el contenido del resumen */
             background-color: #f2f2f2;
             padding: 10px;
             margin-top: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
         }
+
+        /* Estilo para el contenedor del menú de ordenamiento */
+        .sorting-menu {
+            position: absolute;
+            top: 0;
+            right: 20px;
+            /* Alinea a la derecha */
+        }
     </style>
 </head>
+
 <body>
+
     <div class="container mt-5">
+        <div class="sorting-menu">
+            <!-- Selector de ordenamiento -->
+            <div class="input-field">
+                <select id="ordenamiento" onchange="ordenarResultados()">
+                    <option value="relevance">Relevance</option>
+                    <option value="newest">Newest</option>
+                    <option value="oldest">Oldest</option>
+                    <option value="most_cited_papers">Most Cited By Papers</option>
+                    <option value="most_cited_patents">Most Cited By Patents</option>
+                    <option value="most_popular">Most Popular</option>
+                    <option value="title_a_z">Publication Title A-Z</option>
+                    <option value="title_z_a">Publication Title Z-A</option>
+                </select>
+                <label>Sort By:</label>
+            </div>
+            <!-- Fin del selector de ordenamiento -->
+        </div>
         <h1 class="mb-4">Resultados de Scraping</h1>
+
+
         <div class="results-container">
+
+            <!-- Fin del menú desplegable -->
             {% for data_item in data %}
             <div class="result-card card">
-                
-                    <div class="card-content">
-                        <span class="card-title">{{ data_item.Título_de_la_investigación }}</span>
-                        <p><strong>Autor:</strong> {{ data_item.Autor }}</p>
+                <!-- Menú desplegable para ordenar los datos -->
 
-                        
-                        <p><strong>Fuente:</strong> <a href="{{ data_item.Fuente }}" target="_blank">Ir a la fuente</a></p>
-                        <p><strong>Fecha de publicación:</strong> {{ data_item.Fecha_de_publicación }}</p>
-                        <p><strong>Número de citas:</strong> {{ data_item.Número_de_citas }}</p>
-                        <p><strong>Tipo de documento consultado:</strong> {{ data_item.Tipo_de_documento_consultado }}</p>
-                        <p><strong>Cantidad de versiones:</strong> {{ data_item.Cantidad_de_versiones_del_documento }}</p>
-                        
-                        
-                        <!-- Barra de herramientas -->
-                        <ul class="document-toolbar">
-                            <li class="toolbar-item">
-                                <button class="abstract-control btn waves-effect waves-light">Abstract</button>
-                                <div class="abstract-content">
-                                    <p>{{ data_item.Descripción }}</p>
-                                </div>
-                            </li>
-                            <li class="toolbar-item">
-                                <a class="pdf-link" href="{{ data_item.Enlace_del_documento }}" target="_blank">
-                                    <i class="material-icons">picture_as_pdf</i>
-                                </a>
-                            </li>
-                            <li class="toolbar-item">
-                                <a class="copyright-link" href="javascript:void()">
-                                    <i class="material-icons">gavel</i>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                
+                <div class="card-content">
+                    <span class="card-title">{{ data_item.Título_de_la_investigación }}</span>
+                    <p><strong>Autor:</strong> {{ data_item.Autor }}</p>
+
+
+                    <p><strong>Fuente:</strong> <a href="{{ data_item.Fuente }}" target="_blank">Ir a la fuente</a></p>
+                    <p><strong>Fecha de publicación:</strong> <span class="fecha-publicacion">{{data_item.Fecha_de_publicación }}</span></p>
+                    <p><strong>Número de citas:</strong> {{ data_item.Número_de_citas }}</p>
+                    <p><strong>Tipo de documento consultado:</strong> {{ data_item.Tipo_de_documento_consultado }}</p>
+                    <p><strong>Cantidad de versiones:</strong> {{ data_item.Cantidad_de_versiones_del_documento }}</p>
+
+
+                    <!-- Barra de herramientas -->
+                    <ul class="document-toolbar">
+                        <li class="toolbar-item">
+                            <button class="abstract-control btn waves-effect waves-light">Abstract</button>
+                            <div class="abstract-content">
+                                <p>{{ data_item.Descripción }}</p>
+                            </div>
+                        </li>
+                        <li class="toolbar-item">
+                            <a class="pdf-link" href="{{ data_item.Enlace_del_documento }}" target="_blank">
+                                <i class="material-icons">picture_as_pdf</i>
+                            </a>
+                        </li>
+                        <li class="toolbar-item">
+                            <a class="copyright-link" href="javascript:void()">
+                                <i class="material-icons">gavel</i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
             </div>
             {% endfor %}
         </div>
     </div>
-    <!-- Incluye los scripts de Materialize CSS -->
+
     <script>
         // Obtén una lista de todos los botones "Abstract"
         const abstractButtons = document.querySelectorAll('.abstract-control');
-    
+
         // Agrega un controlador de eventos de clic a cada botón
         abstractButtons.forEach(button => {
             button.addEventListener('click', () => {
                 // Encuentra el elemento de resumen más cercano al botón clickeado
                 const abstractContent = button.nextElementSibling;
-    
+
                 // Alterna la visibilidad del resumen
                 if (abstractContent.style.display === 'none' || abstractContent.style.display === '') {
                     abstractContent.style.display = 'block';
@@ -149,6 +188,59 @@
             });
         });
     </script>
+    <script>
+        function ordenarResultados() {
+            var selector = document.getElementById("ordenamiento");
+            var selectedValue = selector.options[selector.selectedIndex].value;
+
+            // Obtén la lista de tarjetas de resultado
+            var resultCards = document.querySelectorAll(".result-card");
+
+            // Convierte la NodeList en un array para facilitar la manipulación
+            var resultArray = Array.from(resultCards);
+
+            // Realiza el ordenamiento según el valor seleccionado
+            if (selectedValue === "relevance") {
+                // Ordena por relevancia (puedes agregar tu lógica de ordenamiento personalizada aquí)
+                resultArray.sort(function (a, b) {
+                    // Lógica de ordenamiento por relevancia
+                    return 0; // Debes reemplazar esto con tu lógica real
+                });
+            } else if (selectedValue === "newest") {
+                // Ordena por fecha de publicación más nueva
+                resultArray.sort(function (a, b) {
+                    // Obtiene las fechas de publicación de las tarjetas a y b
+                    var dateA = new Date(a.querySelector(".fecha-publicacion").textContent);
+                    var dateB = new Date(b.querySelector(".fecha-publicacion").textContent);
+
+                    // Compara las fechas y devuelve el resultado
+                    return dateB - dateA;
+                });
+            } else if (selectedValue === "oldest") {
+                // Ordena por fecha de publicación más antigua (invierte la lógica del caso anterior si es necesario)
+                resultArray.sort(function (a, b) {
+                    var dateA = new Date(a.querySelector(".fecha-publicacion").textContent);
+                    var dateB = new Date(b.querySelector(".fecha-publicacion").textContent);
+                    return dateA - dateB;
+                });
+            }
+
+            // Vuelve a colocar las tarjetas ordenadas en el contenedor
+            var resultsContainer = document.querySelector(".results-container");
+            resultsContainer.innerHTML = "";
+            resultArray.forEach(function (card) {
+                resultsContainer.appendChild(card);
+            });
+        }
+
+    </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var elems = document.querySelectorAll('select');
+            var instances = M.FormSelect.init(elems);
+        });
+    </script>
 </body>
+
 </html>
