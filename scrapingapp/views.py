@@ -1,66 +1,107 @@
 import pandas as pd
 from django.shortcuts import render
-
-from .scrapingArxiv import Clase4
-from .scrapingEric import Clase7
-from .scrapingCora import Clase8
-from .scrapingPudMed import Clase1
-from .scrapingScielo import Clase10
-
 from .models import Resultado  # Asegúrate de importar tu modelo Resultado
-from django.shortcuts import render
+from .scrapingPudMed import Clase1 #+funciona EnlacesFiltros 100% tiene canres revisalo 
+from .scrapingRedalyc import Clase2 #+funciona 60% con filtros de pagina falta validar fecha ini y fin por filtro de resultados para el 100% y no tiene canres y esta haciendo las busquedas siempre en el año actual osea todas en 2023
+from .scrapingGoogleAcademico import Clase3 #+funciona EnlacesFiltros 100% tiene canres revisalo 
+from .scrapingArxiv import Clase4 #+funciona EnlacesFiltros 100% tiene canres revisalo 
+from .scrapingIEEE import Clase5 #falta solo cuadrar el pdf
+from .scrapingDoaj import Clase6 #+funciona 60% con filtros de pagina falta validar fecha ini y fin por filtro de resultados para el 100% y si tiene canres
+from .scrapingEric import Clase7 #+funciona enlacesFiltros 100%, no maneja canres
+from .scrapingCora import Clase8 #-funciona enlacesFiltros 100%, tiene canres revisalo
+from .scrapingRecolecta import Clase9 #+funciona al 60% falyan filtros de fecha, aunque la redeterminada que tiene siempre sera el año actual aparte de esto no tiene canres y esta predeterminado a 10 resultados
+from .scrapingScielo import Clase10 #+funciona 60% con filtros de pagina falta validar fecha ini y fin por filtro de resultados para el 100% y si tiene canres
+
 
 all_data = []  # Declara una variable global para almacenar los datos
 
-def index(request):
+def mostrar_index(request):
     return render(request, 'index.html')
 
-def resultados(request):
+def mostrar_resultados(request):
     return render(request, 'resultados.html', {'data': []})
 
 def scrape_and_export(request):
     global all_data  # Indica que estás usando la variable global
     all_data = []  # Vacía la lista al inicio de cada búsqueda
-
+    display_data = []
     if request.method == 'POST':
 
         #valores recolectados de index.html
         search_kw = request.POST['search_kw']
-        buscarPor = request.POST['buscarPor']
+        busAut = request.POST['busAut']
         anoIni = request.POST['anoIni']
         anoFin = request.POST['anoFin']
         tipDoc = request.POST['tipDoc']
 
-        
         print("search_kw " +search_kw)
-        print("buscarPor " +buscarPor)
+        print("busAut " +busAut)
         print("anoIni " +anoIni)
         print("anoFin " +anoFin)
         print("tipDoc " +tipDoc)
-        
+
+        search_kw = search_kw.strip()
+        search_kw = search_kw.replace(" ","+")
+        busAut = busAut.strip()
+        busAut = busAut.replace(" ","+")
+        anoIni = anoIni.replace(" ","")
+        anoFin = anoFin.replace(" ","")
+
         instancia_clase1 = Clase1()
+        instancia_clase2 = Clase2()
+        instancia_clase3 = Clase3()
         instancia_clase4 = Clase4()
+        instancia_clase5 = Clase5()
+        instancia_clase6 = Clase6()
         instancia_clase7 = Clase7()
         instancia_clase8 = Clase8()
+        instancia_clase9 = Clase9()
         instancia_clase10 = Clase10()
 
-        scraped_data = instancia_clase1.funcion_clase1(search_kw)
-        all_data.extend(scraped_data)
+        #--------------------------------------------------------------------------------------------------------
+        scraped_data = instancia_clase1.funcion_clase1(search_kw, busAut, anoIni, anoFin, tipDoc)
+        if scraped_data is not None:
+            all_data.extend(scraped_data)
+        #--------------------------------------------------------------------------------------------------------
+        scraped_data = instancia_clase2.funcion_clase2(search_kw, busAut, anoIni, anoFin, tipDoc)
+        if scraped_data is not None:
+            all_data.extend(scraped_data)
+        #--------------------------------------------------------------------------------------------------------
+        scraped_data = instancia_clase3.funcion_clase3(search_kw, busAut, anoIni, anoFin, tipDoc)
+        if scraped_data is not None:
+            all_data.extend(scraped_data)
+        #--------------------------------------------------------------------------------------------------------
+        scraped_data = instancia_clase4.funcion_clase4(search_kw, busAut, anoIni, anoFin, tipDoc)
+        if scraped_data is not None:
+            all_data.extend(scraped_data)
+        #--------------------------------------------------------------------------------------------------------
+        scraped_data = instancia_clase5.funcion_clase5(search_kw, busAut, anoIni, anoFin, tipDoc)
+        if scraped_data is not None:
+            all_data.extend(scraped_data)
+        #--------------------------------------------------------------------------------------------------------
+        #scraped_data = instancia_clase6.funcion_clase6(search_kw, busAut, anoIni, anoFin, tipDoc)
+        #if scraped_data is not None:
+            #all_data.extend(scraped_data)
+        #--------------------------------------------------------------------------------------------------------
+        scraped_data = instancia_clase7.funcion_clase7(search_kw, busAut, anoIni, anoFin, tipDoc)
+        if scraped_data is not None:
+            all_data.extend(scraped_data)
+        #--------------------------------------------------------------------------------------------------------
+        #scraped_data = instancia_clase8.funcion_clase8(search_kw, busAut, anoIni, anoFin, tipDoc)
+        #if scraped_data is not None:
+            #all_data.extend(scraped_data)
+        #--------------------------------------------------------------------------------------------------------
+        scraped_data = instancia_clase9.funcion_clase9(search_kw, busAut, anoIni, anoFin, tipDoc)
+        if scraped_data is not None:
+            all_data.extend(scraped_data)
+        #--------------------------------------------------------------------------------------------------------
+        scraped_data = instancia_clase10.funcion_clase10(search_kw, busAut, anoIni, anoFin, tipDoc)
+        if scraped_data is not None:
+            all_data.extend(scraped_data)
+        #--------------------------------------------------------------------------------------------------------
         
-        scraped_data = instancia_clase4.funcion_clase4(search_kw)
-        all_data.extend(scraped_data)
-
-        scraped_data = instancia_clase7.funcion_clase7(search_kw)
-        all_data.extend(scraped_data)
-
-        scraped_data = instancia_clase8.funcion_clase8(search_kw)
-        all_data.extend(scraped_data)
-
-        scraped_data = instancia_clase10.funcion_clase10(search_kw)
-        all_data.extend(scraped_data)
-
         # Crear un DataFrame de pandas desde los datos recolectados
-        df = pd.DataFrame(all_data)
+        df = pd.DataFrame(display_data)
 
         # Define el nombre del archivo Excel
         #excel_filename = 'resultados_busqueda.xlsx'
@@ -69,7 +110,7 @@ def scrape_and_export(request):
         #df.to_excel(excel_filename, index=False)
 
         # Guarda los datos en la base de datos de Django
-        for data_item in all_data:
+        for data_item in display_data:
             resultado = Resultado(
                 Título_de_la_investigación=data_item['Título de la investigación:'],
                 Autor=data_item['Autor:'],
@@ -83,16 +124,32 @@ def scrape_and_export(request):
             )
             resultado.save()
 
+        # Modifica los nombres de las claves en tus datos
+        for item in all_data:
+            # Modifica los nombres de las claves en cada elemento de la lista
+            item['Titulo_de_la_investigacion'] = item.pop('Título de la investigación:')
+            item['Numero_de_citas'] = item.pop('Número de citas:')
+            item['Tipo_de_documento_consultado'] = item.pop('Tipo de documento consultado:')
+            item['Cantidad_de_versiones_del_documento'] = item.pop('Cantidad de versiones del documento:')
+            # Continúa agregando las modificaciones para las demás claves
+            item['Autor'] = item.pop('Autor:')
+            item['Descripción'] = item.pop('Descripción:')
+            item['Fuente'] = item.pop('Fuente:')
+            item['Fecha_de_publicación'] = item.pop('Fecha de publicación:')
+            item['Enlace_del_documento'] = item.pop('Enlace del documento:')
+            item['Repositorio'] = item.pop('Repositorio')
+
+        #print(all_data)
         # Obtén los resultados desde la base de datos
-        ultimos_registros = Resultado.objects.order_by('-id')[:50]
+        context = {'data': all_data}
 
-        # Pasa los resultados a la plantilla y renderiza
-        context = {'data': ultimos_registros}
         return render(request, 'resultados.html', context)
-
     return render(request, 'index.html')
-#######sdasdasdasd
+    
+
 def mostrar_resultados(request):
-    resultados = Resultado.objects.all()  # Obtén los resultados desde la base de datos
-    context = {'data': resultados}  # Pasa los resultados a la plantilla
+    global all_data
+    
+    print(resultados)  # Obtén los resultados desde la base de datos
+    context = {'data': all_data}  # Pasa los resultados a la plantilla
     return render(request, 'resultados.html', context)

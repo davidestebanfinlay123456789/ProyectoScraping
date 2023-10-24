@@ -5,10 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Resultados de Scraping</title>
+    <title>Resultados</title>
     <!-- Incluye las hojas de estilo de Material Design -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+
     <!-- Incluye el CSS personalizado -->
     <style>
         /* Personaliza el estilo del contenedor de resultados */
@@ -22,16 +24,7 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
-        /* Personaliza el estilo de cada tarjeta de resultado */
-        .result-card {
-            background-color: #fff;
-            /* Fondo blanco similar a IEEE Xplore */
-            border: 1px solid #ddd;
-            /* Borde delgado similar a IEEE Xplore */
-            margin-bottom: 20px;
-            padding: 20px;
-            border-radius: 5px;
-        }
+
 
         /* Estilo para el título de la tarjeta */
         .result-card .card-title {
@@ -98,77 +91,310 @@
             right: 20px;
             /* Alinea a la derecha */
         }
+
+        /* Estilo para el input-field más angosto */
+        .narrow-input-field {
+            width: 200px;
+            /* Ajusta el ancho según tus preferencias */
+            margin-left: auto;
+            /* Alinea a la derecha */
+        }
+
+        .pagination-controls {
+            display: flex;
+            /* Para usar el modelo de caja flexible */
+            justify-content: center;
+            /* Centrar horizontalmente */
+            align-items: center;
+            /* Centrar verticalmente */
+        }
+
+        #pageNumbers {
+            flex-grow: 1;
+            /* Hace que el div ocupe todo el espacio disponible */
+            text-align: center;
+            /* Centra los números de página */
+        }
+
+        /* Estilo para el contenedor principal de cada resultado */
+        .result-card {
+            display: flex;
+            border: 1px solid #ddd;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+
+        /* Utiliza CSS para ocultar los elementos */
+        #anoIni,
+        #anoFin {
+            display: none;
+        }
     </style>
+
+
+
 </head>
+<div id="anoIni" data-ano-ini="{{ anoIni }}"></div>
+<div id="anoFin" data-ano-fin="{{ anoFin }}"></div>
 
 <body>
 
-    <div class="container mt-5">
-        <div class="sorting-menu">
+    <div class="container mt-5 ">
+        <!-- Contenedor para el título y el selector -->
+        <div class="result-header" style="display: flex; justify-content: space-between; align-items: center;">
+            <!-- Título de resultados -->
+            <h1 class="mb-4" style="font-size: 24px; margin: 0;">Resultados: {{ data|length }}</h1>
             <!-- Selector de ordenamiento -->
-            <div class="input-field">
+            <div class="input-field narrow-input-field">
+
                 <select id="ordenamiento" onchange="ordenarResultados()">
-                    <option value="relevance">Relevance</option>
+
                     <option value="newest">Newest</option>
                     <option value="oldest">Oldest</option>
-                    <option value="most_cited_papers">Most Cited By Papers</option>
-                    <option value="most_cited_patents">Most Cited By Patents</option>
-                    <option value="most_popular">Most Popular</option>
+
                     <option value="title_a_z">Publication Title A-Z</option>
                     <option value="title_z_a">Publication Title Z-A</option>
                 </select>
                 <label>Sort By:</label>
             </div>
             <!-- Fin del selector de ordenamiento -->
+
         </div>
-        <h1 class="mb-4">Resultados de Scraping</h1>
 
 
         <div class="results-container">
 
-            <!-- Fin del menú desplegable -->
             {% for data_item in data %}
-            <div class="result-card card">
-                <!-- Menú desplegable para ordenar los datos -->
+            <div class="result-card card" style="display: none;">
+                <div class="result-number-placeholder" id="numbers"></div>
+
 
                 <div class="card-content">
-                    <span class="card-title">{{ data_item.Título_de_la_investigación }}</span>
-                    <p><strong>Autor:</strong> {{ data_item.Autor }}</p>
+                    <div class="result-content">
+                        <div>
+                            <a href="{{ data_item.Fuente }}" target="_blank">
+                                <h3 class="text-md-md-lh">
+                                    {{ data_item.Titulo_de_la_investigacion }}
+                                </h3>
+                            </a>
+                        </div>
+                        <div class="mdl-grid">
+                            <div class="mdl-cell mdl-cell--6-col">
 
+                                <p><strong>Autor:</strong> {{ data_item.Autor }}</p>
 
-                    <p><strong>Fuente:</strong> <a href="{{ data_item.Fuente }}" target="_blank">Ir a la fuente</a></p>
-                    <p><strong>Fecha de publicación:</strong> <span class="fecha-publicacion">{{data_item.Fecha_de_publicación }}</span></p>
-                    <p><strong>Número de citas:</strong> {{ data_item.Número_de_citas }}</p>
-                    <p><strong>Tipo de documento consultado:</strong> {{ data_item.Tipo_de_documento_consultado }}</p>
-                    <p><strong>Cantidad de versiones:</strong> {{ data_item.Cantidad_de_versiones_del_documento }}</p>
+                                <p class="fecha-publicacion" id="fecha"><strong>Fecha de publicación:</strong>
+                                    {{data_item.Fecha_de_publicación }}</p>
+                                {% if data_item.Numero_de_citas == "No encontrado" %}
+
+                                {% else %}
+                                <p><strong>Número de citas:</strong> {{ data_item.Numero_de_citas }}</p>
+                                {% endif %}
+                                {% if data_item.Tipo_de_documento_consultado == "No encontrado" %}
+
+                                {% else %}
+                                <p><strong>Tipo de documento consultado:</strong>
+                                    {{data_item.Tipo_de_documento_consultado }}</p>
+                                {% endif %}
+                                {% if data_item.Cantidad_de_versiones_del_documento == "No encontrado" %}
+
+                                {% else %}
+                                <p><strong>Cantidad de versiones:</strong>
+                                    {{data_item.Cantidad_de_versiones_del_documento }}</p>
+                                {% endif %}
+                                <p><strong>Repositorio:</strong> {{ data_item.Repositorio }}</p>
+                            </div>
+                            <!-- Condición para cargar la imagen local -->
+                            <div class="mdl-cell mdl-cell--6-col" style="padding-left: 250px; margin-top: 50px;">
+                                {% if data_item.Repositorio == "PudMed" %}
+                                {% load static %}
+                                <!-- Cargar la imagen local para el repositorio "pudemed" -->
+                                <img src="{% static 'admin/img/pudmed.png' %}" alt="Logo de Pudemed" class="repo-image"
+                                    style="width: 200px; height: auto;">
+                                {% endif %}
+                                {% if data_item.Repositorio == "Arxiv" %}
+                                {% load static %}
+                                <!-- Cargar la imagen local para el repositorio "pudemed" -->
+                                <img src="{% static 'admin/img/arxiv.png' %}" alt="Logo de Pudemed" class="repo-image"
+                                    style="width: 200px; height: auto;">
+                                {% endif %}
+                                {% if data_item.Repositorio == "Doaj" %}
+                                {% load static %}
+                                <!-- Cargar la imagen local para el repositorio "arxiv" -->
+                                <img src="{% static 'admin/img/doaj.png' %}" alt="Logo de ArXiv" class="repo-image"
+                                    style="width: 200px; height: auto;">
+                                {% endif %}
+                                {% if data_item.Repositorio == "Eric" %}
+                                {% load static %}
+                                <!-- Cargar la imagen local para el repositorio "arxiv" -->
+                                <img src="{% static 'admin/img/eric.png' %}" alt="Logo de ArXiv" class="repo-image"
+                                    style="width: 200px; height: auto;">
+                                {% endif %}
+                                {% if data_item.Repositorio == "Google Academico" %}
+                                {% load static %}
+                                <!-- Cargar la imagen local para el repositorio "arxiv" -->
+                                <img src="{% static 'admin/img/googleAcademico.png' %}" alt="Logo de ArXiv"
+                                    class="repo-image" style="width: 200px; height: auto;">
+                                {% endif %}
+                                {% if data_item.Repositorio == "IEEE" %}
+                                {% load static %}
+                                <!-- Cargar la imagen local para el repositorio "arxiv" -->
+                                <img src="{% static 'admin/img/ieee.png' %}" alt="Logo de ArXiv" class="repo-image"
+                                    style="width: 200px; height: auto;">
+                                {% endif %}
+                                {% if data_item.Repositorio == "Recolecta" %}
+                                {% load static %}
+                                <!-- Cargar la imagen local para el repositorio "arxiv" -->
+                                <img src="{% static 'admin/img/recolecta.png' %}" alt="Logo de ArXiv" class="repo-image"
+                                    style="width: 200px; height: auto;">
+                                {% endif %}
+                                {% if data_item.Repositorio == "Redalyk" %}
+                                {% load static %}
+                                <!-- Cargar la imagen local para el repositorio "arxiv" -->
+                                <img src="{% static 'admin/img/redalyk.png' %}" alt="Logo de ArXiv" class="repo-image"
+                                    style="width: 200px; height: auto;">
+                                {% endif %}
+                                {% if data_item.Repositorio == "Scielo" %}
+                                {% load static %}
+                                <!-- Cargar la imagen local para el repositorio "arxiv" -->
+                                <img src="{% static 'admin/img/scielo.png' %}" alt="Logo de ArXiv" class="repo-image"
+                                    style="width: 200px; height: auto;">
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
 
 
                     <!-- Barra de herramientas -->
                     <ul class="document-toolbar">
+                        {% if data_item.Enlace_del_documento == "No encontrado" %}
+
+                        {% else %}
+                        <li class="toolbar-item">
+
+                            <a class="pdf-link" href="{{ data_item.Enlace_del_documento }}" target="_blank">
+                                <i class="material-icons">picture_as_pdf</i>
+                            </a>
+
+                        </li>
+                        {% endif %}
+                        {% if data_item.Descripción == "No encontrado" %}
+
+                        {% else %}
                         <li class="toolbar-item">
                             <button class="abstract-control btn waves-effect waves-light">Abstract</button>
                             <div class="abstract-content">
                                 <p>{{ data_item.Descripción }}</p>
                             </div>
                         </li>
-                        <li class="toolbar-item">
-                            <a class="pdf-link" href="{{ data_item.Enlace_del_documento }}" target="_blank">
-                                <i class="material-icons">picture_as_pdf</i>
-                            </a>
-                        </li>
-                        <li class="toolbar-item">
-                            <a class="copyright-link" href="javascript:void()">
-                                <i class="material-icons">gavel</i>
-                            </a>
-                        </li>
+                        {% endif %}
                     </ul>
                 </div>
 
             </div>
             {% endfor %}
+
+
+            <!-- Mostrar los resultados a continuación -->
+            <ul>
+                {% for resultado in resultados %}
+                <li>{{ resultado.titulo }}</li>
+                <!-- Mostrar otros detalles del resultado según sea necesario -->
+                {% endfor %}
+            </ul>
+
+
+        </div>
+        <!-- Controles de paginación -->
+        <div class="pagination-controls">
+            <!-- Botón "Anterior" -->
+            <button id="prevPage" class="btn waves-effect waves-light">Anterior</button>
+
+            <!-- Números de página (se generan dinámicamente con JavaScript) -->
+            <div id="pageNumbers" class="pagination-numbers"></div>
+
+            <!-- Botón "Siguiente" -->
+            <button id="nextPage" class="btn waves-effect waves-light">Siguiente</button>
         </div>
     </div>
 
+
+
+    <script>
+        // Variables para el control de la paginación
+        var currentPage = 1; // Página actual
+        var resultsPerPage = 10; // Resultados por página
+
+        // Obtén la lista completa de tarjetas de resultado
+        var resultCards = document.querySelectorAll(".result-card");
+
+        // Calcula el número total de páginas
+        var totalPages = Math.ceil(resultCards.length / resultsPerPage);
+
+        // Función para mostrar los resultados en la página actual
+        function showResultsOnPage(page) {
+            var startIndex = (page - 1) * resultsPerPage;
+            var endIndex = startIndex + resultsPerPage;
+
+            // Oculta todas las tarjetas de resultado
+            resultCards.forEach(function (card) {
+                card.style.display = "none";
+            });
+
+            // Muestra las tarjetas en la página actual
+            for (var i = startIndex; i < endIndex; i++) {
+                if (resultCards[i]) {
+                    resultCards[i].style.display = "block";
+                }
+            }
+
+            // Actualiza la visualización de los números de página
+            updatePageNumbers(page);
+        }
+
+        // Función para actualizar los números de página
+        function updatePageNumbers(currentPage) {
+            var pageNumbers = document.getElementById("pageNumbers");
+            pageNumbers.innerHTML = ""; // Limpia cualquier número de página existente
+
+            // Muestra los números de página y agrega un manejador de eventos
+            for (var i = 1; i <= totalPages; i++) {
+                var pageNumber = document.createElement("button");
+                pageNumber.textContent = i;
+                pageNumber.classList.add("btn", "waves-effect", "waves-light");
+                pageNumber.addEventListener("click", function () {
+                    var page = parseInt(this.textContent);
+                    showResultsOnPage(page);
+
+                });
+                pageNumbers.appendChild(pageNumber);
+            }
+        }
+
+        // Manejadores de eventos para los botones de paginación
+        var prevPageButton = document.getElementById("prevPage");
+        var nextPageButton = document.getElementById("nextPage");
+
+        prevPageButton.addEventListener("click", function () {
+            if (currentPage > 1) {
+                currentPage--;
+                showResultsOnPage(currentPage);
+
+            }
+        });
+
+        nextPageButton.addEventListener("click", function () {
+            if (currentPage < totalPages) {
+                currentPage++;
+                showResultsOnPage(currentPage);
+
+            }
+        });
+
+        // Inicialmente, muestra los resultados en la primera página y los números de página
+        showResultsOnPage(currentPage);
+    </script>
     <script>
         // Obtén una lista de todos los botones "Abstract"
         const abstractButtons = document.querySelectorAll('.abstract-control');
@@ -188,8 +414,10 @@
             });
         });
     </script>
+
     <script>
         function ordenarResultados() {
+
             var selector = document.getElementById("ordenamiento");
             var selectedValue = selector.options[selector.selectedIndex].value;
 
@@ -224,22 +452,53 @@
                     return dateA - dateB;
                 });
             }
+            if (selectedValue === "title_a_z") {
+                // Ordena alfabéticamente los resultados por título de la A a la Z
+                resultArray.sort(function (a, b) {
+                    // Obtiene los títulos de las tarjetas a y b
+                    var titleA = a.querySelector("h3").textContent.toLowerCase();
+                    var titleB = b.querySelector("h3").textContent.toLowerCase();
 
+                    // Compara los títulos y devuelve el resultado
+                    if (titleA < titleB) return -1;
+                    if (titleA > titleB) return 1;
+                    return 0;
+                });
+            } else if (selectedValue === "title_z_a") {
+                // Ordena alfabéticamente los resultados por título de la Z a la A (invierte la lógica)
+                resultArray.sort(function (a, b) {
+                    var titleA = a.querySelector("h3").textContent.toLowerCase();
+                    var titleB = b.querySelector("h3").textContent.toLowerCase();
+                    if (titleA > titleB) return -1;
+                    if (titleA < titleB) return 1;
+                    return 0;
+                });
+            }
             // Vuelve a colocar las tarjetas ordenadas en el contenedor
             var resultsContainer = document.querySelector(".results-container");
             resultsContainer.innerHTML = "";
             resultArray.forEach(function (card) {
                 resultsContainer.appendChild(card);
             });
+
         }
 
+
+
+
+
     </script>
+
+
+
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             var elems = document.querySelectorAll('select');
             var instances = M.FormSelect.init(elems);
         });
+
     </script>
 </body>
 

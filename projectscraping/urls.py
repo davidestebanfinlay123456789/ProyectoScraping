@@ -16,11 +16,11 @@ Including another URLconf
 """
 from django.urls import path
 from django.shortcuts import redirect
-from scrapingapp.views import index,mostrar_resultados,scrape_and_export # Importa la vista "index" de tu aplicación
+from scrapingapp.views import mostrar_index,mostrar_resultados,scrape_and_export # Importa la vista "index" de tu aplicación
 
 
 urlpatterns = [
-    
+     path('index/', mostrar_index, name='mostrar_index'),
     path('scrape/', scrape_and_export, name='scrape_and_export'),
     
     path('mostrar_resultados/', mostrar_resultados, name='mostrar_resultados'),
