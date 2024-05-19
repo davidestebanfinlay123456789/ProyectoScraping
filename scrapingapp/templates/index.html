@@ -9,6 +9,42 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
     <style>
+        /* Tu estilo CSS aquí */
+        #loadingScreen {
+            display: none;
+            background-color: rgba(74, 74, 75, 0.5);
+            /* Azul */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        #loadingScreen .spinner-border {
+            margin-top: 50px;
+            color: #fff;
+            /* Color de icono blanco */
+            width: 5rem;
+            /* Tamaño del spinner */
+
+            height: 5rem;
+            /* Tamaño del spinner */
+        }
+
+        #loadingScreen p {
+            color: #fff;
+            /* Color de texto blanco */
+            margin-top: 50px;
+            font-size: 30px;
+            /* Tamaño de fuente */
+        }
+
         body {
             font-family: 'Roboto', sans-serif;
             background-color: #f8f9fa;
@@ -83,23 +119,36 @@
 <body>
     <div class="container">
         <br>
-        <h1 style="text-align: center;">Búsqueda Académica</h1>
+        {% load static %}
+        <div class="row">
+            <div class="col-md-2">
+                <img src="{% static 'admin/img/logoCesmag.PNG' %}" alt="Imagen" class="img-fluid responsive-img" style="max-width: 100%; height: auto;">
+            </div>
+            <div class="col-md-9">
+                <h1 style="text-align: center;">Scraping App</h1>
+            </div>
+            <div class="col-md-1">
+                <img src="{% static 'admin/img/logoCesmag.PNG' %}" alt="Imagen" class="img-fluid responsive-img" style="max-width: 100%; height: auto;">
+            </div>
+        </div>
         <br><br>
-        <form action="{% url 'scrape_and_export' %}" method="post">
+        <form action="{% url 'scrape_and_export' %}" method="post" id="searchForm">
             {% csrf_token %}
             <div class="form-row">
 
                 <div class="input-container">
                     <div class="form-group" style="display: flex; align-items: center;">
-                        <input type="text" id="search_kw" name="search_kw" class="form-control" required placeholder="Escriba su busqueda aqui">
+                        <input type="text" id="search_kw" name="search_kw" class="form-control" required
+                            placeholder="Escriba su busqueda aqui">
                         <label for="search_kw" style="margin-left: -30px;">
                             <i class="material-icons">search</i>
                         </label>
                     </div>
-                </div>               
+                </div>
                 <br>
                 <div class="document-toolbar">
-                    <button type="button" id="btnToggle" >Opciones avanzadas</button>
+                    <button type="button" class="btn btn-info" onclick="window.location.href='https://youtu.be/qqn0Afes1ys'">Ayuda</button>
+                    <button type="button" id="btnToggle">Opciones avanzadas</button>
                 </div>
                 <br>
                 <div class="contenedor1">
@@ -110,32 +159,32 @@
                             <input type="checkbox" id="miCheckbox" onclick="mostrarInput()">
                         </div>
                         <div id="miInput" style="display: none;" class="col-md-6">
-                            <input type="text" id="busAut" name="busAut" placeholder="Escriba el autor aqui" class="form-control">
-                        </div> 
+                            <input type="text" id="busAut" name="busAut" placeholder="Escriba el autor aqui"
+                                class="form-control">
+                        </div>
                     </div>
                     <br>
                     <div class="row">
-                        
+
                         <div class="col-md-4">
-                            <div >
+                            <div>
                                 <label for="anoIni">Año de inicio:</label>
-                                <input type="number" id="anoIni" name="anoIni" class="form-control" min="2003" step="1" >
+                                <input type="number" id="anoIni" name="anoIni" class="form-control" min="2003" step="1">
                             </div>
                         </div>
 
                         <div class="col-md-4">
-                            <div >
+                            <div>
                                 <label for="anoFin">Año de fin:</label>
                                 <input type="number" id="anoFin" name="anoFin" class="form-control" min="2003" step="1">
                             </div>
                         </div>
-                        
+
                         <div class="col-md-4">
-                            <div >
+                            <div>
                                 <div class="form-group select-box">
                                     <label for="tipDoc">Tipo de documento</label>
                                     <select id="tipDoc" name="tipDoc" class="form-control">
-                                        <option value="none"></option>
                                         <option value="todos">Todos</option>
                                         <option value="articulo">Articulo</option>
                                         <option value="revista">Revista</option>
@@ -144,8 +193,57 @@
                                 </div>
                             </div>
                         </div>
-                    </div>    
+
+                        <div class="row  py-3">
+                            <div class="col-md-4">
+                                <label for="tipDoc">Repositorios disponibles</label>
+                                <select class="form-select" id="selectRepositorios" name="selectRepositorios" multiple>
+                                    <option value="0">Todos</option>
+                                    <option value="4">Arxiv</option>
+                                    <option value="8">Cora</option>
+                                    <option value="6">Doaj</option>
+                                    <option value="7">Eric</option>
+                                    <option value="3">Google Academico</option>
+                                    <option value="5">IEEE</option>
+                                    <option value="1">PudMed</option>
+                                    <option value="9">Recolecta</option>
+                                    <option value="2">Redalyc</option>
+                                    <option value="10">Scielo</option>
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
+
+                <div id="loadingScreen" class="spinner-container" style="display: none;">
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="text-center">Recolectando datos...</p>
+                </div>
+                <script>
+                    var select = document.getElementById("selectRepositorios");
+
+                    // Obtén una referencia a la opción que deseas seleccionar (en este caso, la segunda opción)
+                    var opcionSeleccionada = select.options[0];
+
+                    // Establece la opción como seleccionada
+                    opcionSeleccionada.selected = true;
+                </script>
+
+                <script>
+                    var search_kw = document.getElementById("search_kw");
+                    var busAut = document.getElementById("busAut");
+
+                    busAut.addEventListener("input", function () {
+                        if (busAut.value.trim() === "") {
+                            search_kw.setAttribute("required", "required");
+                        } else {
+                            search_kw.removeAttribute("required");
+                        }
+                    });
+                </script>
 
                 <script>
                     // JavaScript para mostrar u ocultar el contenido al hacer clic en el botón
@@ -187,10 +285,32 @@
                         const añoActual = fechaActual.getFullYear();
                         return añoActual;
                     }
+                    // JavaScript para mostrar la pantalla de carga al enviar el formulario
+                    const searchForm = document.getElementById('searchForm');
+                    const loadingScreen = document.getElementById('loadingScreen');
+                    searchForm.addEventListener('submit', (event) => {
 
+                        // Mostrar pantalla de carga
+                        loadingScreen.style.display = 'flex';
+
+                    });
+
+                    // JavaScript para ocultar la pantalla de carga cuando se cargue la página de resultados
+                    window.addEventListener('pageshow', (event) => {
+                        // Ocultar pantalla de carga
+                        loadingScreen.style.display = 'none';
+                        var busAut = document.getElementById("busAut");
+                        var anoIni = document.getElementById("anoIni");
+                        var anoFin = document.getElementById("anoFin");
+                        var tipDoc = document.getElementById("tipDoc");
+
+                        busAut.value = '';
+                        anoIni.value = '';
+                        anoFin.value = '';
+                        tipDoc.value = "todos";
+                    });
                 </script>
 
-                <br>
                 <div>
                     <label>&nbsp;</label>
                     <button type="submit" class="btn btn-primary btn-block" id="buttonForm">Buscar</button>

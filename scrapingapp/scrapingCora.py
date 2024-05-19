@@ -213,11 +213,16 @@ class Clase8:
                     tipo_docu = "No encontrado"
                     version = "No encontrado"
                     repositorio = "Cora"
-
                     componentes_fecha = fecha.split("-")
                     com = componentes_fecha[0]
                     cadena_limpia = com.lstrip()
-                    fec = int(cadena_limpia)
+                    if fecha != "No encontrado":
+                            fec = int(cadena_limpia)
+                    else:
+                            fec = 0  # o cualquier otro valor predeterminado que desees usar en caso de que la fecha no esté disponible
+
+                    #print(str(fec)+" Fecha")
+                    
                     fecha = str(fec)
 
                     if anoIni=='':
@@ -232,18 +237,7 @@ class Clase8:
                     if ini <= fec <= fin:
                         if  titulo!= "No encontrado":
                             data.append({'Título de la investigación:': titulo, 'Autor:': autor, 'Descripción:': resumen, 'Fuente:': fuente, 'Fecha de publicación:': fecha, 'Enlace del documento:': link, 'Número de citas:': num_cit, 'Tipo de documento consultado:': tipo_docu, 'Cantidad de versiones del documento:': version, 'Repositorio': repositorio })
-                    '''
-                        print('Título de la investigación:', titulo)
-                        print('Autor:' , autor)
-                        print('Descripción:' , resumen)
-                        print('Fuente:' , fuente)
-                        print('Fecha de publicación:' , fecha)
-                        print('Enlace del documento:' , link)
-                        print('Número de citas:' , num_cit)
-                        print('Tipo de documento consultado:' , tipo_docu)
-                        print('Cantidad de versiones del documento:' , version) 
-                        print('Repositorio:' , repositorio) 
-                        print('-' * 50)'''   
+
                 
             else:
                 print("Error al hacer la solicitud:", response.status_code)    

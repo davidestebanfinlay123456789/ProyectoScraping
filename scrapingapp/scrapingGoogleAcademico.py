@@ -206,7 +206,7 @@ class Clase3:
                     else:
                         autor = "No encontrado"
 
-                    resumen1 = result.find(class_='gs_rs') 
+                    resumen1 =  result.find(class_='gs_rs') 
                     if resumen1 is not None:
                         resumen = resumen1.text.strip()
                     else:
@@ -225,8 +225,13 @@ class Clase3:
                     fecha1 = result.find( class_='gs_a')
                     if fecha1 is not None:
                         fecha = fecha1.text.strip()
-                        fecha2 = re.search(r'\d{4}', fecha)
-                        fecha = fecha2.group(0) 
+                        match = re.search(r'\b\d{4}\b', fecha)
+                        year = match.group()
+                        fecha = year
+                        print("-------------------------------")
+                        print(year)
+                        print("-------------------------------")
+
                     else:
                         fecha = "No encontrado"
                     
@@ -261,7 +266,7 @@ class Clase3:
                         version = "No encontrado"
 
                     repositorio = "Google Academico"
-
+                    
                     cadena_limpia = re.sub(r'[^0-9-]', ' ', fecha)
                     # Elimina espacios en blanco a la izquierda
                     cadena_limpia = cadena_limpia.lstrip()

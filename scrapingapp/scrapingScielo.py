@@ -50,7 +50,7 @@ class Clase10:
                 url = home_link+"/?q=&lang=pt&count="+str(canres)+"&from=0&output=site&sort=&format=summary&fb=&page=1&q="+search_kw+"&lang=es&page=1&where=&filter%5Byear_cluster%5D%5B%5D="+str(ano)
                 tipo_docu1 = "PDF"
 
-        #print(url)
+        print(url)
 
         if none==0:
 
@@ -157,41 +157,43 @@ class Clase10:
                                     version = versionN + ": " + version
 
                     # Ahora, la variable 'version' tiene un valor en caso de que ninguna condición se cumpla
-
                             
                     tipo_docu = tipo_docu1
                     repositorio = "Scielo"
 
-                    cadena_limpia = re.sub(r'[^0-9-]', ' ', fecha)
-                    # Elimina espacios en blanco a la izquierda
-                    cadena_limpia = cadena_limpia.lstrip()
-                    fec = int(cadena_limpia)
+                    print("fecha"+fecha)
 
-                    if anoIni=='':
-                        ini=1990
-                    else:
-                        ini = int(anoIni)
-                    if anoFin=='':
-                        fin= int(ano)
-                    else:
-                        fin = int(anoFin)
+                    if fecha!="No encontrado":
+                        cadena_limpia = re.sub(r'[^0-9-]', ' ', fecha)
+                        # Elimina espacios en blanco a la izquierda
+                        cadena_limpia = cadena_limpia.lstrip()
+                        fec = int(cadena_limpia)
 
-                    if ini <= fec <= fin:
-                        if  titulo!= "No encontrado":
-                            data.append({'Título de la investigación:': titulo, 'Autor:': autor, 'Descripción:': resumen, 'Fuente:': fuente, 'Fecha de publicación:': fecha, 'Enlace del documento:': link, 'Número de citas:': num_cit, 'Tipo de documento consultado:': tipo_docu, 'Cantidad de versiones del documento:': version, 'Repositorio': repositorio })
-                    '''
-                    # Imprime la información del resultado actual
-                    print('Título de la investigación:', titulo)
-                    print('Autor:' , autor)
-                    print('Descripción:' , resumen)
-                    print('Fuente:' , fuente)
-                    print('Fecha de publicación:' , fecha)
-                    print('Enlace del documento:' , link)
-                    print('Número de citas:' , num_cit)
-                    print('Tipo de documento consultado:' , tipo_docu)
-                    print('Cantidad de versiones del documento:' , version) 
-                    print('Repositoio:' , repositorio) 
-                    print('-' * 50) '''  
+                        if anoIni=='':
+                            ini=1990
+                        else:
+                            ini = int(anoIni)
+                        if anoFin=='':
+                            fin= int(ano)
+                        else:
+                            fin = int(anoFin)
+
+                        if ini <= fec <= fin:
+                            if  titulo!= "No encontrado":
+                                data.append({'Título de la investigación:': titulo, 'Autor:': autor, 'Descripción:': resumen, 'Fuente:': fuente, 'Fecha de publicación:': fecha, 'Enlace del documento:': link, 'Número de citas:': num_cit, 'Tipo de documento consultado:': tipo_docu, 'Cantidad de versiones del documento:': version, 'Repositorio': repositorio })
+                        
+                        # Imprime la información del resultado actual
+                        print('Título de la investigación:', titulo)
+                        print('Autor:' , autor)
+                        print('Descripción:' , resumen)
+                        print('Fuente:' , fuente)
+                        print('Fecha de publicación:' , fecha)
+                        print('Enlace del documento:' , link)
+                        print('Número de citas:' , num_cit)
+                        print('Tipo de documento consultado:' , tipo_docu)
+                        print('Cantidad de versiones del documento:' , version) 
+                        print('Repositoio:' , repositorio) 
+                        print('-' * 50)  
                 
 
             else:

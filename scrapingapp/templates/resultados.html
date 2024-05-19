@@ -24,8 +24,6 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
-
-
         /* Estilo para el título de la tarjeta */
         .result-card .card-title {
             font-size: 24px;
@@ -94,7 +92,7 @@
 
         /* Estilo para el input-field más angosto */
         .narrow-input-field {
-            width: 200px;
+            width: 100px;
             /* Ajusta el ancho según tus preferencias */
             margin-left: auto;
             /* Alinea a la derecha */
@@ -129,9 +127,10 @@
         #anoFin {
             display: none;
         }
+        #export-form {
+        margin-left: 330px; /* Ajusta este valor según tus necesidades */
+    }
     </style>
-
-
 
 </head>
 <div id="anoIni" data-ano-ini="{{ anoIni }}"></div>
@@ -139,11 +138,20 @@
 
 <body>
 
-    <div class="container mt-5 ">
+    <div class="container mt-5  text-center">
         <!-- Contenedor para el título y el selector -->
-        <div class="result-header" style="display: flex; justify-content: space-between; align-items: center;">
-            <!-- Título de resultados -->
-            <h1 class="mb-4" style="font-size: 24px; margin: 0;">Resultados: {{ data|length }}</h1>
+        <div class="result-header" style="display: flex; justify-content: space-between; align-items: center;">  
+            <!-- Botón para retroceder en el navegador -->
+            <button type="button" class="btn btn-primary" onclick="window.history.back()">Regresar</button>
+            <!-- Botón para retroceder en el navegador -->
+            <h1 class="mb-4" style="font-size: 24px; margin: 0;"> Resultados: {{ data|length }}</h1>
+            <!-- Formulario para descargar el archivo Excel -->
+            <div class="text-center">
+                <form id="export-form" action="{% url 'descargar_resultados' %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-success">Exportar Resultados en Excel</button>
+                </form>
+            </div>
             <!-- Selector de ordenamiento -->
             <div class="input-field narrow-input-field">
 
@@ -157,10 +165,12 @@
                 </select>
                 <label>Sort By:</label>
             </div>
+
+            <button type="button" class="btn btn-info" onclick="window.location.href='https://youtu.be/qqn0Afes1ys'">Ayuda</button>
+            <!-- Título de resultados -->
             <!-- Fin del selector de ordenamiento -->
 
         </div>
-
 
         <div class="results-container">
 
@@ -319,6 +329,56 @@
         </div>
     </div>
 
+    <script>
+        function contarCoincidencias() {
+            // Obtener los valores de búsqueda proporcionados por el usuario desde index.html
+            var keywordInput = document.getElementById("search_kw").value.toLowerCase();
+            var authorInput = document.getElementById("busAut").value.toLowerCase();
+            var startYearInput = parseInt(document.getElementById("anoIni").getAttribute("data-ano-ini"));
+            var endYearInput = parseInt(document.getElementById("anoFin").getAttribute("data-ano-fin"));
+            var documentTypeInput = document.getElementById("tipDoc").value.toLowerCase();
+
+            // Obtener todas las tarjetas de resultados
+            var resultCards = document.querySelectorAll(".result-card");
+
+            // Contador para el número de coincidencias
+            var count = 0;
+
+            // Recorrer los resultados y contar las coincidencias
+            resultCards.forEach(function (card) {
+                var title = card.querySelector("h3").textContent.toLowerCase();
+                var cardAuthor = card.querySelector(".card-content p:nth-of-type(1)").textContent.toLowerCase();
+                var publicationYear = parseInt(card.querySelector(".card-content .fecha-publicacion").textContent);
+                var type = card.querySelector(".card-content p:nth-of-type(4)").textContent.toLowerCase();
+
+                // Comprobar si la palabra clave está presente en el título
+                if (title.includes(keywordInput)) {
+                    count++;
+                }
+
+                // Comprobar si el autor coincide (si se proporcionó)
+                if (authorInput && cardAuthor.includes(authorInput)) {
+                    count++;
+                }
+
+                // Comprobar si el año de publicación está dentro del rango especificado (si se proporcionó)
+                if (!isNaN(startYearInput) && !isNaN(endYearInput) && publicationYear >= startYearInput && publicationYear <= endYearInput) {
+                    count++;
+                }
+
+                // Comprobar si el tipo de documento coincide (si se proporcionó)
+                if (documentTypeInput && type === documentTypeInput) {
+                    count++;
+                }
+            });
+
+            // Mostrar el número de coincidencias
+            alert("Número de coincidencias: " + count);
+        }
+
+        // Llamar a la función para contar las coincidencias cuando se cargue la página
+        window.addEventListener("load", contarCoincidencias);
+    </script>
 
 
     <script>
@@ -483,14 +543,7 @@
 
         }
 
-
-
-
-
     </script>
-
-
-
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script>
